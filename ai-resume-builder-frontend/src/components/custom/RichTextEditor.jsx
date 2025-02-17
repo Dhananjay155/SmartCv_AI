@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { Sparkles, LoaderCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import axios from 'axios';
+import { toast } from 'sonner';
 import {
+  Editor,
+  EditorProvider,
+  Toolbar,
   BtnBold,
   BtnBulletList,
   BtnItalic,
@@ -7,30 +14,26 @@ import {
   BtnNumberedList,
   BtnStrikeThrough,
   BtnUnderline,
-  Editor,
-  EditorProvider,
   Separator,
-  Toolbar,
 } from "react-simple-wysiwyg";
-import { AIChatSession } from "@/Services/AiModel";
-import { Button } from "../ui/button";
-import { toast } from "sonner";
-import { Sparkles, LoaderCircle } from "lucide-react";
 
 const PROMPT = `Create a JSON object with the following fields:
     "position_Title": A string representing the job title.
     "experience": An array of strings, each representing a bullet point describing relevant experience for the given job title in html format.
 For the Job Title "{positionTitle}", create a JSON object with the following fields:
 The experience array should contain 5-7 bullet points. Each bullet point should be a concise description of a relevant skill, responsibility, or achievement.`;
-function RichTextEditor({ onRichTextEditorChange, index, resumeInfo }) {
+
+function RichTextEditor({ onRichTextEditorChange = () => {}, index = 0, resumeInfo }) {
   const [value, setValue] = useState(
     resumeInfo?.experience[index]?.workSummary || ""
   );
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    onRichTextEditorChange(value);
-  }, [value]);
+    if (typeof onRichTextEditorChange === 'function') {
+      onRichTextEditorChange(value);
+    }
+  }, [value, onRichTextEditorChange]);
 
   const GenerateSummaryFromAI = async () => {
     if (!resumeInfo?.experience[index]?.title) {
@@ -43,22 +46,49 @@ function RichTextEditor({ onRichTextEditorChange, index, resumeInfo }) {
       "{positionTitle}",
       resumeInfo.experience[index].title
     );
-    const result = await AIChatSession.sendMessage(prompt);
-    console.log(typeof result.response.text());
-    console.log(JSON.parse(result.response.text()));
-    const resp = JSON.parse(result.response.text());
-    await setValue(
-      resp.experience
-        ? resp.experience?.join("")
-        : resp.experience_bullets?.join("")
-    );
-    setLoading(false);
+
+    try {
+      const response = await axios({
+        url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyAIeShHBvjkRYmj01PbthUBX-JiBYDFUXU",
+        method: "post",
+        data: { contents: [{ parts: [{ text: prompt }] }] },
+      });
+
+      const result = response?.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      
+      if (result) {
+        // Clean the response to remove any markdown or unwanted characters
+        const cleanedResult = result.replace(/```json|```/g, '').trim();
+        
+        try {
+          const parsedResult = JSON.parse(cleanedResult);
+          const experience = parsedResult.experience || parsedResult.experience_bullets;
+          
+          if (experience) {
+            setValue(experience.join(''));
+            toast("Experience Generated", "success");
+          } else {
+            toast("Invalid response format", "error");
+          }
+        } catch (parseError) {
+          console.error("Error parsing JSON:", parseError);
+          toast("Error: Invalid JSON response", "error");
+        }
+      } else {
+        toast("Failed to generate experience", "error");
+      }
+    } catch (error) {
+      console.error("Error generating AI response:", error);
+      toast("Error generating experience", `${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div>
       <div className="flex justify-between my-2">
-        <label className="text-xs">Summery</label>
+        <label className="text-xs">Summary</label>
         <Button
           variant="outline"
           size="sm"
@@ -80,7 +110,7 @@ function RichTextEditor({ onRichTextEditorChange, index, resumeInfo }) {
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
-            onRichTextEditorChange(value);
+            onRichTextEditorChange(e.target.value);
           }}
         >
           <Toolbar>
