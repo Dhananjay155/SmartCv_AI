@@ -6,16 +6,17 @@ import { useDispatch } from "react-redux";
 import { addResumeData } from "@/features/resume/resumeFeatures";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { AIChatSession } from "@/Services/AiModel";
 import { updateThisResume } from "@/Services/resumeAPI";
+import axios from "axios";
 
 const prompt =
-  "Job Title: {jobTitle} , Depends on job title give me list of  summery for 3 experience level, Mid Level and Freasher level in 3 -4 lines in array format, With summery and experience_level Field in JSON Format";
+  "Job Title: {jobTitle}, Depends on job title give me list of summaries for 3 experience levels: Mid Level, Freshers, and 3-4 lines in array format, with summary and experience_level fields in JSON format";
+
 function Summary({ resumeInfo, enanbledNext, enanbledPrev }) {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false); // Declare the undeclared variable using useState
-  const [summary, setSummary] = useState(resumeInfo?.summary || ""); // Declare the undeclared variable using useState
-  const [aiGeneratedSummeryList, setAiGenerateSummeryList] = useState(null); // Declare the undeclared variable using useState
+  const [loading, setLoading] = useState(false);
+  const [summary, setSummary] = useState(resumeInfo?.summary || "");
+  const [aiGeneratedSummeryList, setAiGenerateSummeryList] = useState(null);
   const { resume_id } = useParams();
 
   const handleInputChange = (e) => {
@@ -30,14 +31,18 @@ function Summary({ resumeInfo, enanbledNext, enanbledPrev }) {
     setSummary(e.target.value);
   };
 
-  const onSave = (e) => {
+  const onSave = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log("Started Saving Summary");
+
+    // Save text-based summary first
     const data = {
       data: { summary },
     };
+
     if (resume_id) {
+      // Include the uploaded image URL in the resume update
+
       updateThisResume(resume_id, data)
         .then((data) => {
           toast("Resume Updated", "success");
@@ -51,7 +56,7 @@ function Summary({ resumeInfo, enanbledNext, enanbledPrev }) {
           setLoading(false);
         });
     }
-  }; // Declare the undeclared variable using useState
+  };
 
   const setSummery = (summary) => {
     dispatch(
@@ -65,25 +70,52 @@ function Summary({ resumeInfo, enanbledNext, enanbledPrev }) {
 
   const GenerateSummeryFromAI = async () => {
     setLoading(true);
-    console.log("Generate Summery From AI for", resumeInfo?.jobTitle);
+    console.log("Generate Summary From AI for", resumeInfo?.jobTitle);
+  
     if (!resumeInfo?.jobTitle) {
       toast("Please Add Job Title");
       setLoading(false);
       return;
     }
+  
     const PROMPT = prompt.replace("{jobTitle}", resumeInfo?.jobTitle);
+  
     try {
-      const result = await AIChatSession.sendMessage(PROMPT);
-      console.log(JSON.parse(result.response.text()));
-      setAiGenerateSummeryList(JSON.parse(result.response.text()));
-      toast("Summery Generated", "success");
+      const response = await axios({
+        url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyAIeShHBvjkRYmj01PbthUBX-JiBYDFUXU",
+        method: "post",
+        data: { contents: [{ parts: [{ text: PROMPT }] }] },
+      });
+  
+      const result = response?.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      console.log("AI Response:", result);
+  
+      if (result) {
+        // Clean the response to remove any markdown or unwanted characters like backticks
+        const cleanedResult = result.replace(/```json|```/g, '').trim();
+  
+        try {
+          // Attempt to parse the cleaned result as JSON
+          const parsedResult = JSON.parse(cleanedResult);
+          setAiGenerateSummeryList(parsedResult);
+          toast("Summary Generated", "success");
+        } catch (parseError) {
+          // Handle the case where the response is still not valid JSON
+          toast("Error: Invalid JSON response", "error");
+          console.error("Error parsing JSON:", parseError);
+        }
+      } else {
+        toast("Failed to generate summary", "error");
+      }
     } catch (error) {
-      console.log(error);
-      toast("${error.message}", `${error.message}`);
+      console.error(error);
+      toast("Error generating summary", `${error.message}`);
     } finally {
       setLoading(false);
     }
   };
+  
+  
 
   return (
     <div>
@@ -93,7 +125,7 @@ function Summary({ resumeInfo, enanbledNext, enanbledPrev }) {
 
         <form className="mt-7" onSubmit={onSave}>
           <div className="flex justify-between items-end">
-            <label>Add Summery</label>
+            <label>Add Summary</label>
             <Button
               variant="outline"
               onClick={() => GenerateSummeryFromAI()}
