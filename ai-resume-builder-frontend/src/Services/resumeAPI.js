@@ -53,7 +53,7 @@ const updateThisResume = async (resumeID, data) => {
   try {
     const response = await axiosInstance.put(
       `resumes/updateResume?id=${resumeID}`,
-      data.data
+      data
     );
     return response.data;
   } catch (error) {
