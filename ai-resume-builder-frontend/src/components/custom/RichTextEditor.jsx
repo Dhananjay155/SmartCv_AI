@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Sparkles, LoaderCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import axios from 'axios';
-import { toast } from 'sonner';
+import React, { useEffect, useState } from "react";
+import { Sparkles, LoaderCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { toast } from "sonner";
 import {
   Editor,
   EditorProvider,
@@ -19,21 +19,28 @@ import {
 
 const PROMPT = `Create a JSON object with the following fields:
     "position_Title": A string representing the job title.
-    "experience": An array of strings, each representing a bullet point describing relevant experience for the given job title in html format.
+    "experience": An array of strings, each representing a bullet point describing relevant experience for the given job title in HTML format.
 For the Job Title "{positionTitle}", create a JSON object with the following fields:
 The experience array should contain 5-7 bullet points. Each bullet point should be a concise description of a relevant skill, responsibility, or achievement.`;
 
 function RichTextEditor({ onRichTextEditorChange = () => {}, index = 0, resumeInfo }) {
-  const [value, setValue] = useState(
-    resumeInfo?.experience[index]?.workSummary || ""
-  );
+  const [value, setValue] = useState(() => {
+    return localStorage.getItem(`summary-${index}`) || resumeInfo?.experience[index]?.workSummary || "";
+  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (typeof onRichTextEditorChange === 'function') {
+    if (typeof onRichTextEditorChange === "function") {
       onRichTextEditorChange(value);
     }
   }, [value, onRichTextEditorChange]);
+
+  // Function to update editor value & store in localStorage
+  const handleValueChange = (newValue) => {
+    setValue(newValue);
+    onRichTextEditorChange(newValue);
+    localStorage.setItem(`summary-${index}`, newValue);
+  };
 
   const GenerateSummaryFromAI = async () => {
     if (!resumeInfo?.experience[index]?.title) {
@@ -42,10 +49,7 @@ function RichTextEditor({ onRichTextEditorChange = () => {}, index = 0, resumeIn
     }
     setLoading(true);
 
-    const prompt = PROMPT.replace(
-      "{positionTitle}",
-      resumeInfo.experience[index].title
-    );
+    const prompt = PROMPT.replace("{positionTitle}", resumeInfo.experience[index].title);
 
     try {
       const response = await axios({
@@ -55,20 +59,21 @@ function RichTextEditor({ onRichTextEditorChange = () => {}, index = 0, resumeIn
       });
 
       const result = response?.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      
+
       if (result) {
-        // Clean the response to remove any markdown or unwanted characters
-        const cleanedResult = result.replace(/```json|```/g, '').trim();
-        
+        // Clean the response to remove any markdown syntax
+        const cleanedResult = result.replace(/```json|```/g, "").trim();
+
         try {
           const parsedResult = JSON.parse(cleanedResult);
           const experience = parsedResult.experience || parsedResult.experience_bullets;
-          
-          if (experience) {
-            setValue(experience.join(''));
+
+          if (experience && Array.isArray(experience)) {
+            const generatedSummary = experience.join(" ");
+            handleValueChange(generatedSummary);
             toast("Experience Generated", "success");
           } else {
-            toast("Invalid response format", "error");
+            toast("Invalid AI response format", "error");
           }
         } catch (parseError) {
           console.error("Error parsing JSON:", parseError);
@@ -108,10 +113,7 @@ function RichTextEditor({ onRichTextEditorChange = () => {}, index = 0, resumeIn
       <EditorProvider>
         <Editor
           value={value}
-          onChange={(e) => {
-            setValue(e.target.value);
-            onRichTextEditorChange(e.target.value);
-          }}
+          onChange={(e) => handleValueChange(e.target.value)}
         >
           <Toolbar>
             <BtnBold />

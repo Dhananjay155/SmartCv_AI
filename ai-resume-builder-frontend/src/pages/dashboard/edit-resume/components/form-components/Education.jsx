@@ -132,7 +132,7 @@ function Education({ resumeInfo, enanbledNext }) {
                 <div className="flex justify-center items-center gap-4">
                   <select
                     name="gradeType"
-                    className="py-2 px-4 rounded-md"
+                    className="py-2 px-4 rounded-md dark:text-black"
                     onChange={(e) => handleChange(e, index)}
                     value={item?.gradeType}
                   >

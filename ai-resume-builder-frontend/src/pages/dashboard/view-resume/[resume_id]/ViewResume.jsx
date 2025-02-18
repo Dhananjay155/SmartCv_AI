@@ -53,7 +53,7 @@ function ViewResume() {
           </div>
         </div>
         <div
-          className=" bg-white rounded-lg p-8 print-area"
+          className=" bg-white rounded-lg p-8 print-area dark:text-black"
           style={{ width: "210mm", height: "297mm" }}
         >
           <div className="print">

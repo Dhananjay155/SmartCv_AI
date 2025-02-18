@@ -15,7 +15,10 @@ const prompt =
 function Summary({ resumeInfo, enanbledNext, enanbledPrev }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [summary, setSummary] = useState(resumeInfo?.summary || "");
+  const [summary, setSummary] = useState(() => {
+    return localStorage.getItem("resumeSummary") || resumeInfo?.summary || "";
+  });
+  
   const [aiGeneratedSummeryList, setAiGenerateSummeryList] = useState(null);
   const { resume_id } = useParams();
 
@@ -34,39 +37,40 @@ function Summary({ resumeInfo, enanbledNext, enanbledPrev }) {
   const onSave = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    // Save text-based summary first
-    const data = {
-      data: { summary },
-    };
-
+  
+    const data = { summary };
+  
     if (resume_id) {
-      // Include the uploaded image URL in the resume update
-
-      updateThisResume(resume_id, data)
-        .then((data) => {
-          toast("Resume Updated", "success");
-        })
-        .catch((error) => {
-          toast("Error updating resume", `${error.message}`);
-        })
-        .finally(() => {
-          enanbledNext(true);
-          enanbledPrev(true);
-          setLoading(false);
-        });
+      try {
+        const response = await updateThisResume(resume_id, data);
+  
+        // Update Redux state
+        dispatch(addResumeData({ ...resumeInfo, summary }));
+  
+        // Store summary in localStorage for persistence
+        localStorage.setItem("resumeSummary", summary);
+  
+        toast("Resume Updated", "success");
+      } catch (error) {
+        toast("Error updating resume", `${error.message}`);
+      } finally {
+        enanbledNext(true);
+        enanbledPrev(true);
+        setLoading(false);
+      }
     }
   };
+  
+  
 
   const setSummery = (summary) => {
-    dispatch(
-      addResumeData({
-        ...resumeInfo,
-        summary: summary,
-      })
-    );
+    dispatch(addResumeData({ ...resumeInfo, summary }));
     setSummary(summary);
+  
+    // Persist summary in localStorage
+    localStorage.setItem("resumeSummary", summary);
   };
+  
 
   const GenerateSummeryFromAI = async () => {
     setLoading(true);
