@@ -16,12 +16,12 @@ app.use(cookieParser());
 console.log("Allowed Site:", process.env.ALLOWED_SITE);
 
 // ✅ CORS Configuration
-const corsOptions = {
-    origin: process.env.ALLOWED_SITE || "*", // Fallback if env is not loaded
-    methods: "GET,POST,PUT,DELETE,OPTIONS",
-    allowedHeaders: "Content-Type, Authorization",
-    credentials: true
-};
+// const corsOptions = {
+//     origin: process.env.ALLOWED_SITE || "*", // Fallback if env is not loaded
+//     methods: "GET,POST,PUT,DELETE,OPTIONS",
+//     allowedHeaders: "Content-Type, Authorization",
+//     credentials: true
+// };
 
 // ✅ Apply CORS Middleware
 app.use(cors(corsOptions));
