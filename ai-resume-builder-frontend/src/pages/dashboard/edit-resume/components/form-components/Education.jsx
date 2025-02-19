@@ -129,10 +129,10 @@ function Education({ resumeInfo, enanbledNext }) {
               </div>
               <div className="col-span-2">
                 <label>Grade</label>
-                <div className="flex justify-center items-center gap-4">
+                <div className="flex justify-center dark:text-black items-center gap-4">
                   <select
                     name="gradeType"
-                    className="py-2 px-4 rounded-md dark:text-black"
+                    className="py-2 px-4 rounded-md"
                     onChange={(e) => handleChange(e, index)}
                     value={item?.gradeType}
                   >

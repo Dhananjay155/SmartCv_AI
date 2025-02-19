@@ -20,7 +20,7 @@ function PreviewPage() {
       }}
     >
       <PersonalDeatailPreview resumeInfo={resumeData} />
-      {}
+      
       <SummeryPreview resumeInfo={resumeData} />
       {resumeData?.experience && <ExperiencePreview resumeInfo={resumeData} />}
       {resumeData?.projects && <ProjectPreview resumeInfo={resumeData} />}
