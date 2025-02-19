@@ -14,7 +14,8 @@ function HomePage() {
   const dispatch = useDispatch();
   const handleClick = () => {
     window.open(
-      "https://github.com/Dhananjay155/SmartCv_AI","_blank"
+      "https://github.com/sahidrajaansari/Ai-Resume-Builder",
+      "_blank"
     );
   };
 
@@ -49,19 +50,18 @@ function HomePage() {
   };
   return (
     <>
-    <div className="bg-white dark:bg-gray-900 dark:text-white min-h-screen">
       <Header user={user} />
-      <section className="pt-24 pb-20 ">
+      <section className="pt-24 pb-20 bg-white">
         <div className="px-12 mx-auto max-w-7xl">
           <div className="w-full mx-auto text-left md:w-11/12 xl:w-9/12 md:text-center">
-            <h1 className="mb-8 text-4xl font-extrabold leading-none tracking-normal text-gray-900 dark:text-white md:text-6xl md:tracking-tight">
+            <h1 className="mb-8 text-4xl font-extrabold leading-none tracking-normal text-gray-900 md:text-6xl md:tracking-tight">
               <span>Start</span>{" "}
               <span className="block w-full py-2 text-transparent bg-clip-text leading-12 bg-gradient-to-r from-green-400 to-purple-500 lg:inline">
                 building a Resume
               </span>{" "}
               <span>for your next Job</span>
             </h1>
-            <p className="px-0 mb-8 text-lg text-gray-600 dark:text-gray-300 md:text-xl  lg:px-24">
+            <p className="px-0 mb-8 text-lg text-gray-600 md:text-xl lg:px-24">
               Build. Refine. Shine. With AI-Driven Resumes
             </p>
             <div className="mb-4 space-x-0 md:space-x-2 md:mb-8">
@@ -85,7 +85,7 @@ function HomePage() {
               </a>
               <a
                 onClick={handleClick}
-                className="inline-flex items-center justify-center w-full px-6 py-3 mb-2 text-lg bg-gray-100 dark:text-black rounded-2xl sm:w-auto sm:mb-0 cursor-pointer "
+                className="inline-flex items-center justify-center w-full px-6 py-3 mb-2 text-lg bg-gray-100 rounded-2xl sm:w-auto sm:mb-0 cursor-pointer"
               >
                 Learn More
                 <svg
@@ -126,14 +126,19 @@ function HomePage() {
           </div>
         </div>
       </section>
-      <footer  aria-labelledby="footer-heading">
+      <footer className="bg-white" aria-labelledby="footer-heading">
         <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 p-5 flex justify-between">
-          <p className="text-xs leading-5 text-gray-500 dark:text-gray-400">
-            &copy; 2024 SmartCV_AI. All rights reserved.
+          <p className="text-xs leading-5 text-gray-500">
+            &copy; 2024 Ai-Resume-Builder. All rights reserved.
           </p>
+          <div>
+            <Button variant="secondary" onClick={handleClick}>
+              <FaGithub className="w-4 h-4 mr-1" />
+              GitHub
+            </Button>
+          </div>
         </div>
       </footer>
-      </div>
     </>
   );
 }

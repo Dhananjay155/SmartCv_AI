@@ -18,12 +18,9 @@ const generationConfig = {
   responseMimeType: "application/json",
 };
 
-const safetySettings = {
-  safetyLevel: "high", 
-};
-
 export const AIChatSession = model.startChat({
-  generationConfig: generationConfig,
-  safetySettings: safetySettings,
-  history: [], 
+  generationConfig,
+  // safetySettings: Adjust safety settings
+  // See https://ai.google.dev/gemini-api/docs/safety-settings
+  history: [],
 });
