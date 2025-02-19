@@ -51,10 +51,10 @@ function HomePage() {
   return (
     <>
       <Header user={user} />
-      <section className="pt-24 pb-20 bg-white">
+      <section className="pt-24 pb-20 bg-white dark:bg-gray-900">
         <div className="px-12 mx-auto max-w-7xl">
           <div className="w-full mx-auto text-left md:w-11/12 xl:w-9/12 md:text-center">
-            <h1 className="mb-8 text-4xl font-extrabold leading-none tracking-normal text-gray-900 md:text-6xl md:tracking-tight">
+            <h1 className="mb-8 text-4xl font-extrabold leading-none tracking-normal text-gray-900 md:text-6xl md:tracking-tight dark:text-white">
               <span>Start</span>{" "}
               <span className="block w-full py-2 text-transparent bg-clip-text leading-12 bg-gradient-to-r from-green-400 to-purple-500 lg:inline">
                 building a Resume
@@ -85,7 +85,7 @@ function HomePage() {
               </a>
               <a
                 onClick={handleClick}
-                className="inline-flex items-center justify-center w-full px-6 py-3 mb-2 text-lg bg-gray-100 rounded-2xl sm:w-auto sm:mb-0 cursor-pointer"
+                className="inline-flex items-center justify-center w-full px-6 py-3 mb-2 text-lg bg-gray-100 rounded-2xl sm:w-auto sm:mb-0 cursor-pointer dark:text-black"
               >
                 Learn More
                 <svg
@@ -126,17 +126,11 @@ function HomePage() {
           </div>
         </div>
       </section>
-      <footer className="bg-white" aria-labelledby="footer-heading">
-        <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 p-5 flex justify-between">
-          <p className="text-xs leading-5 text-gray-500">
+      <footer className=" dark:bg-gray-900" aria-labelledby="footer-heading">
+        <div className="p-2">
+          <p className="text-xs leading-5 text-black dark:text-white">
             &copy; 2024 Ai-Resume-Builder. All rights reserved.
           </p>
-          <div>
-            <Button variant="secondary" onClick={handleClick}>
-              <FaGithub className="w-4 h-4 mr-1" />
-              GitHub
-            </Button>
-          </div>
         </div>
       </footer>
     </>
