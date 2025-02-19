@@ -12,11 +12,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: [process.env.ALLOWED_SITE],
-    credentials: true
+    origin: process.env.ALLOWED_SITE,  
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"], 
+    allowedHeaders: ["Content-Type", "Authorization"],  
 };
-
 app.use(cors(corsOptions));
+
+app.options("*", cors(corsOptions));  
+
 
 app.use("/api/users", userRouter);
 app.use("/api/resumes", resumeRouter);
