@@ -11,22 +11,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-const corsOptions = {
-    origin: ["https://smart-cv-ai.vercel.app", "http://localhost:5173"], 
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"], 
-    allowedHeaders: ["Content-Type", "Authorization"],  
-};
+// const corsOptions = {
+//     origin: [process.env.ALLOWED_SITE],
+//     credentials: true
+// };
 
-app.use(cors(corsOptions));
-
-app.options("*", (req, res) => {
-    res.set("Access-Control-Allow-Origin", req.headers.origin || "*");
-    res.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-    res.set("Access-Control-Allow-Headers", "Content-Type,Authorization");
-    res.set("Access-Control-Allow-Credentials", "true");
-    res.status(204).end();
-});
+// app.use(cors(corsOptions));
 
 app.use("/api/users", userRouter);
 app.use("/api/resumes", resumeRouter);
