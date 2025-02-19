@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: "https://smart-cv-ai.vercel.app/",
+    origin: [process.env.ALLOWED_SITE],
     credentials: true
 };
 
