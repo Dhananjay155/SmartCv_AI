@@ -19,7 +19,7 @@ function PersonalDeatailPreview({ resumeInfo }) {
         style={{
           color: resumeInfo?.themeColor,
         }}
-      >
+      > <h5>Address:</h5>
         {resumeInfo?.address}
       </h2>
 
@@ -29,7 +29,7 @@ function PersonalDeatailPreview({ resumeInfo }) {
           style={{
             color: resumeInfo?.themeColor,
           }}
-        >
+        ><h5>Phone:</h5>
           {resumeInfo?.phone}
         </h2>
         <h2
@@ -37,7 +37,7 @@ function PersonalDeatailPreview({ resumeInfo }) {
           style={{
             color: resumeInfo?.themeColor,
           }}
-        >
+        ><h1>Email:</h1>
           {resumeInfo?.email}
         </h2>
       </div>
