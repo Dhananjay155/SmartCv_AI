@@ -9,18 +9,19 @@ import ProjectPreview from "./preview-components/ProjectPreview";
 
 function PreviewPage() {
   const resumeData = useSelector((state) => state.editResume.resumeData);
+
   useEffect(() => {
     console.log("PreviewPage rendered ");
   }, [resumeData]);
+
   return (
     <div
-      className={`shadow-lg h-full p-14 border-t-[20px]`}
+      className="shadow-lg w-full max-w-4xl mx-auto p-6 md:p-10 border-t-[10px] md:border-t-[20px] rounded-lg bg-white"
       style={{
-        borderColor: resumeData?.themeColor ? resumeData.themeColor : "#000000",
+        borderColor: resumeData?.themeColor || "#000000",
       }}
     >
       <PersonalDeatailPreview resumeInfo={resumeData} />
-      
       <SummeryPreview resumeInfo={resumeData} />
       {resumeData?.experience && <ExperiencePreview resumeInfo={resumeData} />}
       {resumeData?.projects && <ProjectPreview resumeInfo={resumeData} />}

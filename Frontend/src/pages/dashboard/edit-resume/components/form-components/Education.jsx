@@ -102,7 +102,7 @@ function Education({ resumeInfo, enanbledNext }) {
                 />
               </div>
               <div>
-                <label>Major</label>
+                <label>Specialization</label>
                 <Input
                   name="major"
                   onChange={(e) => handleChange(e, index)}
@@ -132,7 +132,7 @@ function Education({ resumeInfo, enanbledNext }) {
                 <div className="flex justify-center dark:text-black items-center gap-4">
                   <select
                     name="gradeType"
-                    className="py-2 px-4 rounded-md"
+                    className="py-2 px-4 rounded-md "
                     onChange={(e) => handleChange(e, index)}
                     value={item?.gradeType}
                   >
@@ -143,6 +143,7 @@ function Education({ resumeInfo, enanbledNext }) {
                   <Input
                     type="text"
                     name="grade"
+                    className = "dark:text-white"
                     onChange={(e) => handleChange(e, index)}
                     defaultValue={item?.endDate}
                   />
