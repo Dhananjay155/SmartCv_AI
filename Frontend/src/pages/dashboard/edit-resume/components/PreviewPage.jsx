@@ -16,7 +16,7 @@ function PreviewPage() {
 
   return (
     <div
-      className="shadow-lg w-full max-w-4xl mx-auto p-6 md:p-10 border-t-[10px] md:border-t-[20px] rounded-lg bg-white"
+      className="shadow-lg w-full max-w-4xl mx-auto p-6 md:p-10 border-t-[10px] md:border-t-[20px] rounded-lg dark:text-white"
       style={{
         borderColor: resumeData?.themeColor || "#000000",
       }}
