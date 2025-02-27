@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: ['https://smart-cv-ai.vercel.app/'],
+    origin: ['https://wortal-recipes.vercel.app/'],
     credentials: true
 };
 

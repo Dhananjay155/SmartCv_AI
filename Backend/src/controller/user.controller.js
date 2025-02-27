@@ -59,14 +59,12 @@ const  registerUser = async (req, res) => {
       )
     );
   } catch (err) {
-    // Change the error parameter to err
     console.log("Registration Failed due to server error");
     console.error("Error while creating user:", err);
     return res
       .status(500)
       .json(new ApiError(500, "Internal Server Error.", [], err.stack));
   }
-  // return res.status(200).send("Hello WOrld")
 };
 
 const loginUser = async (req, res) => {
@@ -103,14 +101,14 @@ const loginUser = async (req, res) => {
     const jwtToken = jwt.sign(
       { id: user.id },
       process.env.JWT_SECRET_KEY,
-      { expiresIn:"1hr" } // Add token expiration for better security
+      { expiresIn:"1hr" } 
     );
 
     const cookieOptions = {
       httpOnly: true,
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // Set cookie to expire in 1 day
-      sameSite: process.env.NODE_ENV == "Dev" ? "lax" : "none", // Set SameSite attribute for better security
-      secure: process.env.NODE_ENV == "Dev" ? false : true, // Set Secure attribute for better security
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), 
+      sameSite: process.env.NODE_ENV == "Dev" ? "lax" : "none", 
+      secure: process.env.NODE_ENV == "Dev" ? false : true, 
     };
     
 
