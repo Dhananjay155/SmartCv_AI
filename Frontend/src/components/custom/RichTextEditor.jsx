@@ -35,7 +35,6 @@ function RichTextEditor({ onRichTextEditorChange = () => {}, index = 0, resumeIn
     }
   }, [value, onRichTextEditorChange]);
 
-  // Function to update editor value & store in localStorage
   const handleValueChange = (newValue) => {
     setValue(newValue);
     onRichTextEditorChange(newValue);
@@ -61,7 +60,6 @@ function RichTextEditor({ onRichTextEditorChange = () => {}, index = 0, resumeIn
       const result = response?.data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
       if (result) {
-        // Clean the response to remove any markdown syntax
         const cleanedResult = result.replace(/```json|```/g, "").trim();
 
         try {

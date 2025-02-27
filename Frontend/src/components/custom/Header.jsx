@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/Services/login";
 import { addUserData } from "@/features/user/userFeatures";
-import { Sun, Moon, Menu, X } from "lucide-react"; // Icons for UI
+import { Sun, Moon, Menu, X } from "lucide-react"; 
 import lightLogo from "../../assets/WhiteLogo.png";
 import darkLogo from "../../assets/DarkLogo.png";
 import { Button } from "../ui/button";
@@ -31,7 +31,7 @@ function Header({ user }) {
     try {
       const response = await logoutUser();
       if (response.statusCode === 200) {
-        dispatch(addUserData("")); // Reset user data
+        dispatch(addUserData(""));
         navigate("/");
       }
     } catch (error) {
@@ -42,7 +42,6 @@ function Header({ user }) {
   return (
     <nav className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-5">
-        {/* Logo */}
         <Link to="/">
           <img
             src={theme === "light" ? lightLogo : darkLogo}
@@ -51,7 +50,6 @@ function Header({ user }) {
           />
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-4">
           <Button variant="outline" onClick={toggleTheme}>
             {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
@@ -70,7 +68,6 @@ function Header({ user }) {
           )}
         </div>
 
-        {/* Mobile Hamburger Menu */}
         <button
           className="md:hidden focus:outline-none"
           onClick={toggleMenu}
@@ -79,7 +76,6 @@ function Header({ user }) {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden flex flex-col items-center gap-4 bg-gray-100 dark:bg-gray-800 p-5">
           <Button variant="outline" onClick={toggleTheme}>

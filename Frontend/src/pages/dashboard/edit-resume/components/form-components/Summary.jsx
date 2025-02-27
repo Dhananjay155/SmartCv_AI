@@ -89,16 +89,13 @@ function Summary({ resumeInfo, enanbledNext, enanbledPrev }) {
       console.log("AI Response:", result);
   
       if (result) {
-        // Clean the response to remove any markdown or unwanted characters like backticks
         const cleanedResult = result.replace(/```json|```/g, '').trim();
   
         try {
-          // Attempt to parse the cleaned result as JSON
           const parsedResult = JSON.parse(cleanedResult);
           setAiGenerateSummaryList(parsedResult);
           toast("Summary Generated", "success");
         } catch (parseError) {
-          // Handle the case where the response is still not valid JSON
           toast("Error: Invalid JSON response", "error");
           console.error("Error parsing JSON:", parseError);
         }

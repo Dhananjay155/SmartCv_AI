@@ -29,7 +29,6 @@ function ResumeForm() {
     }
   }, [currentIndex]);
 
-  // To Add Dummy Data
   // useEffect(() => {
   //   dispatch(addResumeData(data));
   // }, []);

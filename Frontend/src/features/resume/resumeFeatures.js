@@ -13,7 +13,6 @@ export const resumeSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { addResumeData } = resumeSlice.actions;
 
 export default resumeSlice.reducer;

@@ -24,7 +24,6 @@ const PROMPT = `Create a JSON object with the following fields:
 projectName-"{projectName}"
 techStack-"{techStack}"`;
 
-// Configure axios instance for Gemini API
 const geminiAPI = axios.create({
   baseURL: 'https://generativelanguage.googleapis.com/v1beta',
   headers: {
@@ -36,7 +35,6 @@ function SimpleRichTextEditor({ index, onRichTextEditorChange, resumeInfo }) {
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   
-  // Get API key from environment variable
   const API_KEY = "AIzaSyAIeShHBvjkRYmj01PbthUBX-JiBYDFUXU";
 
   useEffect(() => {
@@ -74,7 +72,6 @@ function SimpleRichTextEditor({ index, onRichTextEditorChange, resumeInfo }) {
 
   const parseAIResponse = (text) => {
     try {
-      // Clean the response to remove any markdown or unwanted characters
       const cleanedResult = text.replace(/```json|```/g, '').trim();
       const response = JSON.parse(cleanedResult);
       
@@ -124,7 +121,6 @@ function SimpleRichTextEditor({ index, onRichTextEditorChange, resumeInfo }) {
     } catch (error) {
       console.error("Error generating summary:", error);
       
-      // Handle specific API errors
       if (error.response?.status === 400) {
         toast("Invalid API key or request format", { type: "error" });
       } else if (error.response?.status === 429) {

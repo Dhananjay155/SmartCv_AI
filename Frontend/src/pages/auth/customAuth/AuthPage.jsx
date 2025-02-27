@@ -61,7 +61,6 @@ function AuthPage() {
     event.preventDefault();
     const { fullname, email, password } = event.target.elements;
 
-    // Simple email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email.value)) {
       setError("Please enter a valid email address.");
@@ -120,7 +119,6 @@ function AuthPage() {
 
         <div className="relative overflow-hidden h-80">
           {" "}
-          {/* Added height to ensure content is visible */}
           <motion.div
             className={`absolute inset-0 transition-transform duration-500 ${
               isSignUp ? "translate-x-0" : "translate-x-full"
